@@ -1,4 +1,4 @@
-from app import app
+from authentication.app.app import app
 
 import unittest
 

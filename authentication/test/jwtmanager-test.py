@@ -1,8 +1,8 @@
 """Tests for any JWT related logic.
 """
 
-from jwtmanager import JWTManager
-from user import FakeUserManager
+from authentication.jwt.jwtmanager import JWTManager
+from authentication.user.user import FakeUserManager
 
 import unittest
 
