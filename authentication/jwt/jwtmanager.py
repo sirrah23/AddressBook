@@ -3,8 +3,10 @@
 
 import jwt
 
+from datetime import datetime
+
 class JWTManager:
-    """This class will allow you to create, validate, and decommission JWTs.
+    """This class will allow you to create & validate JWTs.
     """
 
     def __init__(self, userManager, secret=None, algorithm='HS256'):
