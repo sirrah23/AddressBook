@@ -7,7 +7,7 @@ from authentication.user.user import FakeUserManager
 app = Sanic(__name__)
 jwtm = JWTManager(userManager=FakeUserManager(validCredFlag=True))
 
-@app.route("/generateAuthToken", methods=['POST', ])
+@app.route('/generateAuthToken', methods=['POST', ])
 async def generateAuthToken(request):
     reqData = request.json
     # TODO: Separate request validation code
@@ -21,6 +21,18 @@ async def generateAuthToken(request):
         return json({'error': 1, 'errorMsg': 'Something went wrong', 'token': None})
     else:
         return json({'error': 0, 'errorMsg': '','token': newJWT})
+
+@app.route('/validateAuthToken', methods=['POST', ])
+async def validateAuthToken(request):
+    reqData = request.json
+    if 'token' not in reqData:
+        return json({'error': 1, 'errorMsg': 'The request parameters are invalid', 'payload': None})
+    try:
+        payload = jwtm.decodeJWT(reqData['token'])
+    except ValueError:
+        return json({'error': 1, 'errorMsg': 'Invalid token', 'payload': None})
+    else:
+        return json({'error':0, 'errorMsg': '', 'payload': payload})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
