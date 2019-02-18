@@ -15,7 +15,7 @@ The tokens managed by this service are [JSON Web Tokens](https://jwt.io/).
 This action creates a new JWT if a valid set of credentials is provided.
 
 * Endpoint: 
-  * /getAuthToken
+  * /generateAuthToken
 * Input: 
   * Username
   * Password
