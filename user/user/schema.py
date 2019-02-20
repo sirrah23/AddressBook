@@ -20,6 +20,16 @@ class User(Base):
     password = Column(String)
     is_active = Column(Boolean, default=True)
 
+    @property
+    def data_dict(self):
+        return {
+            "uuid": self.uuid,
+            "username": self.username,
+            "email": self.email,
+            "password": self.password,
+            "is_active": self.is_active
+        }
+
 
 def initializeDatabase():
     """Makes the database usable by creating all of the tables.

@@ -1,7 +1,11 @@
+"""This file contains the user data object which can be used to read/write 
+from/to the database and to marshall data in formats like JSON.
+"""
+
 import uuid
 import bcrypt
 
-def validateString(s):
+def validate_string(s):
     if type(s) != str:
         raise TypeError(f"Expected a value of type string but instead received {type(s).__name__}")
     bad_chars = ("\n", "\r", "\t")
@@ -23,21 +27,24 @@ class UserDataObject(object):
         self._set_uuid(uuid)
 
     def _set_username(self, username):
-        validateString(username)
+        validate_string(username)
         self._username = username
     
     def _get_username(self):
         return self._username
     
     def _set_password(self, password):
-        validateString(password)
-        self._hashed_password = bcrypt.hashpw(password.encode(encoding="UTF-8"), bcrypt.gensalt())
+        if type(password) == bytes:
+            self._hashed_password = password
+        else:
+            validate_string(password)
+            self._hashed_password = bcrypt.hashpw(password.encode(encoding="UTF-8"), bcrypt.gensalt())
     
     def _get_password(self):
         return self._hashed_password
     
     def _set_email(self, email):
-        validateString(email)
+        validate_string(email)
         self._email = email
     
     def _get_email(self):
@@ -47,7 +54,7 @@ class UserDataObject(object):
         if uuid == None:
             self._uuid = uuid
             return
-        validateString(uuid)
+        validate_string(uuid)
         self._uuid = uuid
     
     def _get_uuid(self):
@@ -59,3 +66,20 @@ class UserDataObject(object):
     password = property(_get_password, _set_password)
     email = property(_get_email, _set_email)
     uuid = property(_get_uuid, _set_uuid)
+
+    _data_dict_keys = ["username", "password", "email", "uuid"]
+
+    def to_data_dict(self):
+        res = {}
+        for prop in dir(self):
+            if prop in self.__class__._data_dict_keys:
+                res[prop] = getattr(self, prop)
+        return res
+    
+    @classmethod
+    def from_data_dict(cls, user_data_dict):
+        args = {}
+        for prop in user_data_dict:
+            if prop in cls._data_dict_keys:
+                args[prop] = user_data_dict[prop]
+        return cls(**args)
