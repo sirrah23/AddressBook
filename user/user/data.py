@@ -1,4 +1,5 @@
 import uuid
+import bcrypt
 
 def validateString(s):
     if type(s) != str:
@@ -29,12 +30,11 @@ class UserDataObject(object):
         return self._username
     
     def _set_password(self, password):
-        # TODO: Encrypt password
         validateString(password)
-        self._password = password
+        self._hashed_password = bcrypt.hashpw(password.encode(encoding="UTF-8"), bcrypt.gensalt())
     
     def _get_password(self):
-        return self._password
+        return self._hashed_password
     
     def _set_email(self, email):
         validateString(email)
