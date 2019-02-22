@@ -11,9 +11,14 @@ class RegistrationService:
         """
         try:
             udo = self.user_data_obj.from_data_dict(user_dict)
-            self.user_sql.store_user(udo)
-        except (TypeError, ValueError) as e:
+        except (TypeError, ValueError) as e:    
             return {"error": 1, "errorMsg": "Could not store the user, bad input", 
                     "user": None}
+
+        try:
+            self.user_sql.store_user(udo)
+        except ValueError as e:
+            return {"error": 1, "errorMsg": str(e), "user": None}
+        
         return {"error": 0, "errorMsg": "", "user": udo.to_data_dict()}
 
