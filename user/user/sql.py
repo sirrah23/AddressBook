@@ -1,9 +1,9 @@
 """Contains code that allows you to write UserDataObjects to SQL and to fetch data from SQL and 
 return its associated UserDataObject.
 """
-from user import engine
-from user.data import UserDataObject
-from user.schema import User
+from . import engine
+from user.user.data import UserDataObject
+from user.user.schema import User
 from sqlalchemy.orm import sessionmaker
 
 class UserSqlDataConn:
