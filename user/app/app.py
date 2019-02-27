@@ -12,13 +12,11 @@ registration_service = RegistrationServiceFactory.get_registration_service()
 
 @app.route("/register", methods=["POST", ])
 async def register(request):
-    # TODO: Too much random logic floating around, let's shove some of it into the registration service object
     reqData = request.json
-    if ("username" not in reqData) or ("password" not in reqData) or ("email" not in reqData):
-        return json({"error": 1, "errorMsg": "The request parameters are invalid"})
+    if not registration_service.is_valid_register_params(reqData):
+        return json({"error": 1, "errorMsg": "The request parameters are invalid", "user": None})
     registration_result = registration_service.register_new_user(reqData)
-    if registration_result["error"] == 0:
-        registration_result["user"].pop("password", None)
+    registration_result = registration_service.clean_user_dict(registration_result)
     return json(registration_result)
 
 

@@ -21,4 +21,13 @@ class RegistrationService:
             return {"error": 1, "errorMsg": str(e), "user": None}
         
         return {"error": 0, "errorMsg": "", "user": udo.to_data_dict()}
-
+    
+    def is_valid_register_params(self, rp):
+        needed_parameters = ["username", "password", "email"]
+        return all(p in rp for p in needed_parameters)
+    
+    def clean_user_dict(self, ud):
+        res = ud
+        if res["user"]:
+            res["user"].pop("password", None)
+        return res
