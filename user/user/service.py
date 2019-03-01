@@ -57,7 +57,7 @@ class ValidationService:
         user = self.user_sql.fetch_by_username(rp["username"])
         if not user:
             return res
-        found = bcrypt.checkpw(rp["password"], user.password)
+        found = bcrypt.checkpw(rp["password"].encode("utf8"), user.password)
         res["found"] = found
         res["user_id"] = user.uuid
         res["username"] = user.username

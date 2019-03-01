@@ -1,9 +1,10 @@
-from user.user.service_factory import RegistrationServiceFactory
+from user.user.service_factory import RegistrationServiceFactory, ValidationServiceFactory
 from user.user.schema import initializeDatabase
 
 import unittest
 
 # TODO: Need to implement a dropDatabase() function too...
+# TODO: Drop the database after each test
 initializeDatabase()
 
 class CanRegisterUserTest(unittest.TestCase):
@@ -53,6 +54,37 @@ class CanCleanUserDataDictionaryTest(unittest.TestCase):
         assert len(res["errorMsg"]) > 0
         assert res["user"] == None
 
+
+class CanValidateUsers(unittest.TestCase):
+
+    rs = RegistrationServiceFactory.get_registration_service()
+    vs = ValidationServiceFactory.get_validation_service()
+
+    def test_can_validate_existing_user(self):
+        ud = {"username": "u6", "password": "p1", "email": "email@domain.com"}
+        self.__class__.rs.register_new_user(ud)
+        res = self.__class__.vs.validate_user(ud)
+        assert res["found"] == True
+        assert res["username"] == ud["username"]
+        assert "user_id" in res
+
+    def test_can_validate_existing_user_bad_pw(self):
+        ud = {"username": "u7", "password": "p1", "email": "email@domain.com"}
+        self.__class__.rs.register_new_user(ud)
+        res = self.__class__.vs.validate_user({"username": ud["username"], "password": "incorrectpass"})
+        assert res["found"] == False
+        assert res["username"] == ud["username"]
+        assert "user_id" in res 
+
+    def test_can_validate_nonexistent_user(self):
+        res = self.__class__.vs.validate_user({"username": "a", "password": "b"})
+        assert res["found"] == False
+        assert res["username"] is None
+        assert res["user_id"] is None
+    
+    def test_can_validate_request_params(self):
+        assert self.__class__.vs.is_valid_params({"username": "u1", "password": "p1"}) == True
+        assert self.__class__.vs.is_valid_params({"password": "p1"}) == False
 
 if __name__ == "__main__":
     unittest.main()
