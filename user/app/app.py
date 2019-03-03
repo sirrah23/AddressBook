@@ -10,7 +10,6 @@ app = Sanic(__name__)
 registration_service = RegistrationServiceFactory.get_registration_service()
 validation_service = ValidationServiceFactory.get_validation_service()
 
-
 @app.route("/register", methods=["POST", ])
 async def register(request):
     reqData = request.json
