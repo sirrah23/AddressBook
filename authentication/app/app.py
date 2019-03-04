@@ -2,10 +2,10 @@ from sanic import Sanic
 from sanic.response import json
 
 from authentication.jwt.jwtmanager import JWTManager
-from authentication.user.user import FakeUserManager
+from authentication.user.user import UserManager
 
 app = Sanic(__name__)
-jwtm = JWTManager(userManager=FakeUserManager(validCredFlag=True))
+jwtm = JWTManager(userManager=UserManager())
 
 @app.route('/generateAuthToken', methods=['POST', ])
 async def generateAuthToken(request):
