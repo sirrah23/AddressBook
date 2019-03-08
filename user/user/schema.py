@@ -15,7 +15,7 @@ class User(Base):
     __tablename__ = "user"
 
     uuid = Column(String, primary_key=True)
-    username =  Column(String)
+    username = Column(String)
     email = Column(String)
     password = Column(String)
     is_active = Column(Boolean, default=True)
@@ -27,11 +27,11 @@ class User(Base):
             "username": self.username,
             "email": self.email,
             "password": self.password,
-            "is_active": self.is_active
+            "is_active": self.is_active,
         }
 
 
 def initializeDatabase():
     """Makes the database usable by creating all of the tables.
     """
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine.engine)
