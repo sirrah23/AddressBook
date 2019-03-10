@@ -10,6 +10,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     python-dev \
     gcc \
+    python-psycopg2 \
   && rm -rf /var/lib/apt/lists/*
 
 # Install pipenv so that we can use it to generate a requirements.txt file

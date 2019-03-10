@@ -9,5 +9,5 @@ mode = os.environ.get("mode", "test").strip().lower()
 
 dbc = None
 if mode != "test" and mode != "development":
-    dbc = DBConfig("~/.config/aileron/cfg.json")
+    dbc = DBConfig("/etc/AddressBook/cfg.json")
 engine = EngineManager(mode, configObj=dbc)
