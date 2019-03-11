@@ -36,6 +36,7 @@ class RegistrationService:
         res = ud
         if res["user"]:
             res["user"].pop("password", None)
+            res["user"].pop("hashed_password", None)
         return res
 
 
@@ -57,7 +58,7 @@ class ValidationService:
         user = self.user_sql.fetch_by_username(rp["username"])
         if not user:
             return res
-        found = bcrypt.checkpw(rp["password"].encode("utf8"), user.password)
+        found = user.is_correct_password(rp["password"])
         res["found"] = found
         res["user_id"] = user.uuid
         res["username"] = user.username

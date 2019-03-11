@@ -20,9 +20,15 @@ def validate_string(s):
 
 class UserDataObject(object):
 
-    def __init__(self, username, password, email, uuid=None):
+    _data_dict_keys = ["username", "password", "email", "uuid", "hashed_password"]
+
+    def __init__(self, username, email, password=None, hashed_password=None, uuid=None):
+        self._password = None
+        self._hashed_password = None
+        self._uuid = None
         self._set_username(username)
         self._set_password(password)
+        self._set_hashed_password(hashed_password)
         self._set_email(email)
         self._set_uuid(uuid)
 
@@ -34,14 +40,18 @@ class UserDataObject(object):
         return self._username
     
     def _set_password(self, password):
-        if type(password) == bytes:
-            self._hashed_password = password
-        else:
-            validate_string(password)
-            self._hashed_password = bcrypt.hashpw(password.encode(encoding="UTF-8"), bcrypt.gensalt())
+        if password is None:
+            return
+        password_type = type(password)
+        if password_type not in (str, bytes):
+            raise ValueError(f"Input password is expected to be of type `str` or `bytes` but is of type {password_type.__name__}")
+        if password_type == bytes:
+            password = str(password)
+        validate_string(password)
+        self._password = password 
     
     def _get_password(self):
-        return self._hashed_password
+        return self._password
     
     def _set_email(self, email):
         validate_string(email)
@@ -58,16 +68,30 @@ class UserDataObject(object):
         self._uuid = uuid
     
     def _get_uuid(self):
-        if self._uuid == None:
+        if self._uuid is None:
             self._uuid = str(uuid.uuid4())
         return self._uuid
+    
+    def _set_hashed_password(self, hashed_password):
+        self._hashed_password = None
+        if self._password is not None:
+            self._hashed_password = bcrypt.hashpw(self._password.encode(encoding="utf8"), bcrypt.gensalt()).decode("utf8")
+        elif hashed_password is not None:
+            self._hashed_password = hashed_password
+    
+    def _get_hashed_password(self):
+        return self._hashed_password
     
     username = property(_get_username, _set_username)
     password = property(_get_password, _set_password)
     email = property(_get_email, _set_email)
     uuid = property(_get_uuid, _set_uuid)
+    hashed_password = property(_get_hashed_password, _set_hashed_password)
 
-    _data_dict_keys = ["username", "password", "email", "uuid"]
+    def is_correct_password(self, input_password):
+        if type(input_password) != bytes:
+            input_password = input_password.encode(encoding="utf8")
+        return bcrypt.checkpw(input_password, self._hashed_password.encode(encoding="utf8"))
 
     def to_data_dict(self):
         res = {}

@@ -19,7 +19,7 @@ class CanRegisterUserTest(unittest.TestCase):
         assert res["user"]["username"] == ud["username"]
         assert res["user"]["email"] == ud["email"]
         assert "uuid" in res["user"]
-        assert "password" in res["user"]
+        assert "hashed_password" in res["user"]
 
 
 class CanValidateRequestParametersTest(unittest.TestCase):
@@ -43,6 +43,7 @@ class CanCleanUserDataDictionaryTest(unittest.TestCase):
         res = self.__class__.rs.register_new_user(ud)
         res = self.__class__.rs.clean_user_dict(res)
         assert "password" not in res["user"]
+        assert "hashed_password" not in res["user"]
 
     def test_password_not_removed_when_failed_register(self):
         ud = {"username": "u4", "password": "p1", "email": "email@domain.com"}
