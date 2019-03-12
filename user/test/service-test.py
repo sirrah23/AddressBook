@@ -12,7 +12,7 @@ class CanRegisterUserTest(unittest.TestCase):
     rs = RegistrationServiceFactory.get_registration_service()
 
     def test_register_a_single_user(self):
-        ud = {"username": "u1", "password": "p1", "email": "email@domain.com"}
+        ud = {"username": "u1_serv", "password": "p1", "email": "email@domain.com"}
         res = self.__class__.rs.register_new_user(ud)
         assert res["error"] == 0
         assert res["errorMsg"] == ""

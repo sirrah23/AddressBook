@@ -11,6 +11,7 @@ bcrypt = "*"
 sanic = "*"
 aiohttp = "*"
 psycopg2 = "*"
+nose = "*"
 
 [requires]
 python_version = "3.6"

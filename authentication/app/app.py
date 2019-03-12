@@ -1,11 +1,17 @@
+import os
+
 from sanic import Sanic
 from sanic.response import json
 
 from authentication.jwt.jwtmanager import JWTManager
-from authentication.user.user import UserManager
+from authentication.user.user import UserManager, FakeUserManager
 
 app = Sanic(__name__)
-jwtm = JWTManager(userManager=UserManager())
+
+if os.environ.get("mode", "test") == "test":
+    jwtm = JWTManager(userManager=FakeUserManager())
+else:
+    jwtm = JWTManager(userManager=UserManager())
 
 @app.route('/generateAuthToken', methods=['POST', ])
 async def generateAuthToken(request):
