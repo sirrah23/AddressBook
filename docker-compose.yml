@@ -1,0 +1,32 @@
+version: '3'
+services:
+  authentication:
+    build: ./authentication
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./authentication:/authentication
+    container_name: auth_node
+  user:
+    build: ./user
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./user:/user
+      - /etc/AddressBook:/etc/AddressBook
+    container_name: user_node
+    environment:
+      - mode=prod
+    depends_on:
+      - "user_db"
+  user_db:
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    container_name: addb-user-db
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - hot_standby=on
+
+volumes:
+  pgdata:
