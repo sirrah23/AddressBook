@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This folder contains the code for a **microservice** which oversees the management of user data.
+This folder contains the code for a **service** which oversees the management of user data.
 
 ## Supported actions/endpoints
 
@@ -40,3 +40,9 @@ This action validates a given set of credentials i.e. (username, password).
     * Found flag (a valid user was found for the given credentials)
     * User ID
     * Username
+
+## How to run this service
+From this directory run the **run.sh** script.
+
+## How to run the tests
+From this directory run the **test.sh** script.
