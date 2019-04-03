@@ -4,8 +4,6 @@ const contactSchema = require('../schema/contact.js')
 const userSchema = require('../schema/user.js')
 
 const initTables = async () => {
-    //TODO: Make this call configurable once we start using databases other than sqlite3 
-    await dbConn.raw('PRAGMA foreign_keys = ON') 
     //TODO: This should be a loop instead
     const hasUserTable = await dbConn.schema.hasTable('user')
     if(!hasUserTable){

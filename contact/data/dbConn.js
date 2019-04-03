@@ -1,7 +1,6 @@
+//TODO: Make the connection string configurable
 module.exports = require('knex')({
-    client: 'sqlite3',
-    connection:{
-        filename: './contact.sqlite'
-    }
+    client: 'pg',
+    connection: 'postgresql://postgres:mysecretpassword@localhost:5432/test'
 })
 

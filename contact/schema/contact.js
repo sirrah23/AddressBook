@@ -6,6 +6,6 @@ module.exports = (table) => {
     table.string('phoneNumber')
     table.integer('userId').unsigned()
     table.foreign('userId').references('id').on('user')
-    table.timestamps()
+    table.timestamps('created_at', true)
 }
 
