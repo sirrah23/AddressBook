@@ -2,10 +2,10 @@ const dbConn = require('../data/dbConn.js')
 
 class User{
 
-    constructor(uuid, id=null, createdAt=null){
+    constructor(uuid, id, createdAt){
         this.uuid = uuid
-        this.id = id
-        this.createdAt = createdAt
+        this.id = id                //optional
+        this.createdAt = createdAt  //optional
     }
 
     async insert(){
@@ -17,6 +17,13 @@ class User{
         this.id = res[0].id
         this.createdAt = res[0].created_at
         return this
+    }
+
+     static async fetch(uuid){
+        const res = await dbConn('user')
+                        .where({'uuid': uuid})
+        if(res.length == 0) return null
+        return new User(res[0].uuid, res[0].id, res[0].created_at)
     }
 
 }
