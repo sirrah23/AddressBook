@@ -2,7 +2,7 @@ const dbConn = require('../data/dbConn.js')
 
 class Contact{
 
-    constructor(name, address, relationship, phoneNumber, user, id=null, createdAt=null){
+    constructor(name, address, relationship, phoneNumber, user, id, createdAt){
         this.name = name
         this.address = address
         this.relationship = relationship
