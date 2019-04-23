@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
 
@@ -7,6 +8,7 @@ const initTables = require('./data/init.js')
 
 initTables()
     .then(() => {    
+        app.use(bodyParser.json())
         app.use('/api/v1/contact', contactRouter)
         app.listen(port, () => console.log(`App is listening on port ${port}`))
     })

@@ -9,6 +9,7 @@
   "author": "sirrah23",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "knex": "^0.16.3",
     "pg": "^7.9.0",
