@@ -1,0 +1,4 @@
+FROM postgres:11.1-alpine
+
+# Initialization script to create our starter tables
+COPY ./create.sql /docker-entrypoint-initdb.d/

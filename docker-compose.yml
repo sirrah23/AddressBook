@@ -24,11 +24,22 @@ services:
   user_db:
     image: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - user_pgdata:/var/lib/postgresql/data
     container_name: addb-user-db
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - hot_standby=on
+  contact_db:
+    build: ./database/contact
+    ports:
+      - "5432:5432"
+    container_name: addb-contact-db
+    volumes:
+      - contact_pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
       - hot_standby=on
 
 volumes:
-  pgdata:
+  user_pgdata:
+  contact_pgdata:
