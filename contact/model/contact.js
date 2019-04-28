@@ -27,6 +27,17 @@ class Contact{
         return this
     }
 
+    toJSON(){
+        return {
+            name: this.name,
+            address: this.address,
+            relationship: this.relationship,
+            phoneNumber: this.phoneNumber,
+            id: this.id,
+            createdAt: this.createdAt
+        }
+    }
+
 }
 
 module.exports = Contact

@@ -13,7 +13,11 @@ const ContactController = {
         }
         let newContact = new Contact(name, address, relationship, phoneNumber, user)
         await newContact.insert()
-        return {errorFlag: 0, message: `Contact ${newContact.id} has been inserted into the database for user ${user.uuid}`}
+        return {
+            errorFlag: 0, 
+            message: `Contact ${newContact.id} has been inserted into the database for user ${user.uuid}`,
+            contact: newContact.toJSON(),
+        }
     }
 
 }

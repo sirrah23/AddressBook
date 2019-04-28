@@ -1,4 +1,3 @@
-const knex = require('knex')
 const logger = require('../util/logger.js')
 const dbConn = require('./dbConn.js')
 const contactSchema = require('../schema/contact.js')
@@ -20,7 +19,6 @@ const initTables = async () => {
     } else {
         logger.info('Contact table already exists, skipping initialization')
     }
-    
 }
 
 module.exports = initTables

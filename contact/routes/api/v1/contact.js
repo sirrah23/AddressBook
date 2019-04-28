@@ -9,11 +9,11 @@ router.post('/', async (req, res) => {
     const contact = req.body.contact
     if(!userUUID){
         logger.warn('Aborting, a user uuid was not found, check auth middleware')
-        return res.status(400).json({errorFlag: 1, message: "Invalid user authorization"})
+        return res.status(400).json({errorFlag: 1, message: "Invalid user authorization", contact: {}})
     }
     if(!contact){
         logger.warn('Aborting, the caller did not supply any contact data to post')
-        return res.status(400).json({errorFlag: 1, message: "No contact data provided"})
+        return res.status(400).json({errorFlag: 1, message: "No contact data provided", contact: {}})
     }
     const contactCreateRes = await ContactController.createNewContact(userUUID, contact.name, contact.address, contact.relationship, contact.phoneNumber)
     if (contactCreateRes.errorFlag === 0){
