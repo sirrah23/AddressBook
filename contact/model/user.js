@@ -8,7 +8,7 @@ class User{
         this.createdAt = createdAt  //optional
     }
 
-    async insert(){
+    async save(){
         const res = await dbConn('user')
                             .insert({
                                 'uuid': this.uuid
@@ -19,9 +19,16 @@ class User{
         return this
     }
 
-     static async fetch(uuid){
+     static async fetch(uuid){  //TODO: rename this to fetchByUUID
         const res = await dbConn('user')
                         .where({'uuid': uuid})
+        if(res.length == 0) return null
+        return new User(res[0].uuid, res[0].id, res[0].created_at)
+    }
+
+    static async fetchById(id){
+        const res = await dbConn('user')
+                        .where({'id': id})
         if(res.length == 0) return null
         return new User(res[0].uuid, res[0].id, res[0].created_at)
     }

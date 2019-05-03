@@ -9,7 +9,7 @@ initTables()
         app.listen(port, () => logger.info(`App is listening on port ${port}`))
     })
     .catch(e => {
-        console.log(`Something went wrong: \n\t${e}`)
+        logger.error(`Something went wrong: \n\t${e}`)
         process.exit(1)
     })
 
