@@ -35,10 +35,20 @@ class Contact{
         return this
     }
 
+    async remove(){
+        if(!this.id) return false
+
+        const numRowsDeleted = await dbConn('contact')
+                            .where({id: this.id})
+                            .del()
+
+        return numRowsDeleted > 0
+    }
+
     static async fetchById(id){
         const contact = await dbConn('contact')
                                 .where({'id': id})
-        if(contact.length == 0) return null
+        if(contact.length === 0) return null
         const user = await User.fetchById(contact[0].userId)
         if(!user) return null
         return new Contact(

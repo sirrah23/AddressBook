@@ -50,8 +50,41 @@ const ContactController = {
             message: `Contact ${contact.id} has been updated for user ${user.uuid}`,
             contact: contact.toJSON(),
         }
-    }
+    },
 
+    async deleteContact(userUUID, contactID){
+        const user = await User.fetch(userUUID)
+
+        const contact = await Contact.fetchById(contactID)
+
+        if(!contact){
+            return {
+                errorFlag: 1,
+                message: `Contact with id ${contactID} was not found`
+            }
+        }
+
+        if(contact.user.uuid !== userUUID){
+            return{
+                errorFlag: 1,
+                message: `Contact with id ${contactID} does not belong to user ${userUUID}` 
+            }
+        }
+
+        const deleteSuccess = await contact.remove()
+
+        if(deleteSuccess){
+            return {
+                errorFlag: 0,
+                message: `Contact ${contact.id} has been deleted for user ${user.uuid}`,
+            }
+        } else {
+            return {
+                errorFlag: 1,
+                message: `Contact ${contact.id} for user ${user.uuid} could not be deleted`,
+            }
+        }
+    }
 }
 
 module.exports = ContactController
