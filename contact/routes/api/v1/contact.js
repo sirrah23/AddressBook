@@ -3,6 +3,28 @@ const router = express.Router()
 const ContactController = require('../../../controller/user.js')
 const logger = require('../../../util/logger.js')
 
+router.get('/:contactId', async(req, res) => {
+    logger.info(`Start contact get with parameters: ${JSON.stringify(req.body)}`)
+    const userUUID = req.body.userUUID
+    const contactId = req.params.contactId
+    if(!userUUID){
+        logger.warn('Aborting, a user uuid was not found, check auth middleware')
+        return res.status(400).json({errorFlag: 1, message: "Invalid user authorization", contact: {}})
+    }
+    if(!contactId){
+        logger.warn('Aborting, the caller did not supply a contact id')
+        return res.status(400).json({errorFlag: 1, message: "No contact id provided", contact: {}})
+    }
+    const contactGetRes = await ContactController.getContact(userUUID, contactId)
+    if (contactGetRes.errorFlag === 0){
+        logger.info(`Success: ${contactGetRes.message}`)
+        return res.status(200).json(contactGetRes)
+    } else {
+        logger.warn(`Failure: ${contactGetRes.message}`)
+        return res.status(400).json(contactGetRes)
+    }
+})
+
 router.post('/', async (req, res) => {
     logger.info(`Start contact post with parameters: ${JSON.stringify(req.body)}`)
     const userUUID = req.body.userUUID

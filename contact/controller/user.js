@@ -3,6 +3,44 @@ const Contact = require('../model/contact.js')
 
 const ContactController = {
 
+
+    async getContact(userUUID, contactID){
+        const user = await User.fetch(userUUID)
+
+        if (!user){
+            return {
+                errorFlag: 1,
+                message: `User with uuid ${userUUID} was not found`,
+                contact: {}
+            }
+        }
+
+        const contact = await Contact.fetchById(contactID)
+
+        if(!contact){
+            return {
+                errorFlag: 1,
+                message: `Contact with id ${contactID} was not found`,
+                contact: {}
+            }
+        }
+
+        if(contact.user.uuid !== userUUID){
+            return {
+                errorFlag: 1,
+                message: `Contact with id ${contactID} does not belong to user ${userUUID}`,
+                contact: {}
+            }
+        }
+
+        return {
+            errorFlag: 0,
+            message: `Contact ${contact.id} has been retrieved for user ${user.uuid}`,
+            contact: contact.toJSON()
+        }
+
+    },
+
     async createNewContact(userUUID, name, address, relationship, phoneNumber,){
         const user = await User.fetch(userUUID)
         if (!user){
