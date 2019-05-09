@@ -75,20 +75,49 @@ const ContactController = {
         }
     },
 
-    async createNewContact(userUUID, name, address, relationship, phoneNumber,){
+    async createNewContact(userUUID, contact){
+        if(!userUUID){
+            return{
+                statusCode: 400,
+                responseBody:{
+                    errorFlag: 1, 
+                    message: "Invalid user authorization", 
+                    contact: {} 
+                }
+            }
+            
+        }
+        if(!contact){
+            return{
+                statusCode: 400,
+                responseBody: {
+                    errorFlag: 1,
+                    message: "No contact data provided",
+                    contact: {}
+                }
+            }
+        }
+        
         const user = await User.fetch(userUUID)
         if (!user){
             return {
-                errorFlag: 1,
-                message: `User with uuid ${userUUID} was not found`
+                statusCode: 400,
+                responseBody:{
+                    errorFlag: 1,
+                    message: `User with uuid ${userUUID} was not found`    
+                }
             }
         }
-        let newContact = new Contact(name, address, relationship, phoneNumber, user)
+
+        const newContact = new Contact(contact.name, contact.address, contact.relationship, contact.phoneNumber, user)
         await newContact.save()
         return {
-            errorFlag: 0, 
-            message: `Contact ${newContact.id} has been inserted into the database for user ${user.uuid}`,
-            contact: newContact.toJSON(),
+            statusCode:201,
+            responseBody:{
+                errorFlag: 0, 
+                message: `Contact ${newContact.id} has been inserted into the database for user ${user.uuid}`,
+                contact: newContact.toJSON(),
+            }
         }
     },
 
