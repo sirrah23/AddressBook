@@ -196,21 +196,50 @@ const ContactController = {
     },
 
     async deleteContact(userUUID, contactID){
+        
+        if(!userUUID){
+            return {
+                statusCode: 400,
+                responseBody: {
+                    errorFlag: 1,
+                    message: "Invalid user authorization",
+                    contact: {},
+                }
+            }
+        }
+        
+        if(!contactID){
+            return {
+                statusCode: 400,
+                responseBody: {
+                    errorFlag: 1,
+                    message: "No contact id provided",
+                    contact: {}
+                }
+            }        
+        }
+
         const user = await User.fetch(userUUID)
 
         const contact = await Contact.fetchById(contactID)
 
         if(!contact){
             return {
-                errorFlag: 1,
-                message: `Contact with id ${contactID} was not found`
+                statusCode: 400,
+                responseBody: {                
+                    errorFlag: 1,
+                    message: `Contact with id ${contactID} was not found`
+                }
             }
         }
 
         if(contact.user.uuid !== userUUID){
             return{
-                errorFlag: 1,
-                message: `Contact with id ${contactID} does not belong to user ${userUUID}` 
+                statusCode: 400,
+                responseBody: {
+                    errorFlag: 1,
+                    message: `Contact with id ${contactID} does not belong to user ${userUUID}` 
+                }
             }
         }
 
@@ -218,13 +247,19 @@ const ContactController = {
 
         if(deleteSuccess){
             return {
-                errorFlag: 0,
-                message: `Contact ${contact.id} has been deleted for user ${user.uuid}`,
+                statusCode: 200,
+                responseBody: {
+                    errorFlag: 0,
+                    message: `Contact ${contact.id} has been deleted for user ${user.uuid}`,
+                }
             }
         } else {
             return {
-                errorFlag: 1,
-                message: `Contact ${contact.id} for user ${user.uuid} could not be deleted`,
+                statusCode: 400,
+                responseBody: {
+                    errorFlag: 1,
+                    message: `Contact ${contact.id} for user ${user.uuid} could not be deleted`,
+                }
             }
         }
     }

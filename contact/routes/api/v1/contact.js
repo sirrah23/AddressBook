@@ -31,26 +31,13 @@ router.put('/:contactID', async(req, res) => {
     return res.status(contactCreateRes.statusCode).json(contactCreateRes.responseBody)
 })
 
-router.delete('/:contactId', async(req, res) => {
-    logger.info(`Start contact delete with parameters: ${JSON.stringify(req.body)}`)
+router.delete('/:contactID', async(req, res) => {
+    logger.info(`Start contact DELETE with parameters: ${JSON.stringify(req.body)}`)
     const userUUID = req.body.userUUID
-    const contactId = req.params.contactId
-    if(!userUUID){
-        logger.warn('Aborting, a user uuid was not found, check auth middleware')
-        return res.status(400).json({errorFlag: 1, message: "Invalid user authorization", contact: {}})
-    }
-    if(!contactId){
-        logger.warn('Aborting, the caller did not supply a contact id')
-        return res.status(400).json({errorFlag: 1, message: "No contact id provided", contact: {}})
-    }
-    const contactDeleteRes = await ContactController.deleteContact(userUUID, contactId)
-    if (contactDeleteRes.errorFlag === 0){
-        logger.info(`Success: ${contactDeleteRes.message}`)
-        return res.status(200).json(contactDeleteRes)
-    } else {
-        logger.warn(`Failure: ${contactDeleteRes.message}`)
-        return res.status(400).json(contactDeleteRes)
-    }
+    const contactID = req.params.contactID
+    const contactDeleteRes = await ContactController.deleteContact(userUUID, contactID)
+    logger.info(`End contact DELETE with response: ${JSON.stringify(contactDeleteRes)}`)
+    return res.status(contactDeleteRes.statusCode).json(contactDeleteRes.responseBody)
 })
 
 module.exports = router
