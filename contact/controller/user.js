@@ -121,35 +121,77 @@ const ContactController = {
         }
     },
 
-    async updateContact(userUUID, contactID, data){
+    async updateContact(userUUID, contactID, contactData){
+        if(!userUUID){
+            return{
+                statusCode: 400,
+                responseBody: {
+                    errorFlag: 1,
+                    message: "Invalid user authorization",
+                    contact: {}
+                }
+            }
+        }
+
+        if(!contactData){
+            return{
+                statusCode: 400,
+                responseBody: {
+                    errorFlag: 1,
+                    message: "No contact data provided",
+                    contact: {}
+                }
+            }    
+        }
+
+        if(!contactID){
+            return{
+                statusCode: 400,
+                responseBody:{
+                    errorFlag: 1,
+                    message: "No contact id provided",
+                    contact: {}
+                }
+            }
+        }
+
         const user = await User.fetch(userUUID)
 
         const contact = await Contact.fetchById(contactID)
         
         if(!contact){
             return {
-                errorFlag: 1,
-                message: `Contact with id ${contactID} was not found`
+                statusCode: 400,
+                responseBody:{
+                    errorFlag: 1,
+                    message: `Contact with id ${contactID} was not found`
+                }
             }
         }
 
         if(contact.user.uuid !== userUUID){
             return {
-                errorFlag: 1,
-                message: `Contact with id ${contactID} does not belong to user ${userUUID}`
+                statusCode: 400,
+                responseBody:{
+                    errorFlag: 1,
+                    message: `Contact with id ${contactID} does not belong to user ${userUUID}`
+                }
             }
         }
 
-        if('name' in data) contact.name = data.name
-        if('address' in data) contact.address = data.address
-        if('relationship' in data) contact.relationship = data.relationship
-        if('phoneNumber' in data) contact.phoneNumber = data.phoneNumber
+        if('name' in contactData) contact.name = contactData.name
+        if('address' in contactData) contact.address = contactData.address
+        if('relationship' in contactData) contact.relationship = contactData.relationship
+        if('phoneNumber' in contactData) contact.phoneNumber = contactData.phoneNumber
 
         await contact.save()
         return {
-            errorFlag: 0, 
-            message: `Contact ${contact.id} has been updated for user ${user.uuid}`,
-            contact: contact.toJSON(),
+            statusCode: 200,
+            responseBody:{
+                errorFlag: 0, 
+                message: `Contact ${contact.id} has been updated for user ${user.uuid}`,
+                contact: contact.toJSON(),
+            }
         }
     },
 

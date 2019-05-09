@@ -21,31 +21,14 @@ router.post('/', async (req, res) => {
     return res.status(contactCreateRes.statusCode).json(contactCreateRes.responseBody)
 })
 
-router.put('/:contactId', async(req, res) => {
-    logger.info(`Start contact put with parameters: ${JSON.stringify(req.body)}`)
+router.put('/:contactID', async(req, res) => {
+    logger.info(`Start contact PUT with parameters: ${JSON.stringify(req.body)}`)
     const userUUID = req.body.userUUID
-    const contactId = req.params.contactId
+    const contactID = req.params.contactID
     const contact = req.body.contact
-    if(!userUUID){
-        logger.warn('Aborting, a user uuid was not found, check auth middleware')
-        return res.status(400).json({errorFlag: 1, message: "Invalid user authorization", contact: {}})
-    }
-    if(!contact){
-        logger.warn('Aborting, the caller did not supply any contact data')
-        return res.status(400).json({errorFlag: 1, message: "No contact data provided", contact: {}})
-    }
-    if(!contactId){
-        logger.warn('Aborting, the caller did not supply a contact id')
-        return res.status(400).json({errorFlag: 1, message: "No contact id provided", contact: {}})
-    }
-    const contactCreateRes = await ContactController.updateContact(userUUID, contactId, contact)
-    if (contactCreateRes.errorFlag === 0){
-        logger.info(`Success: ${contactCreateRes.message}`)
-        return res.status(200).json(contactCreateRes)
-    } else {
-        logger.warn(`Failure: ${contactCreateRes.message}`)
-        return res.status(400).json(contactCreateRes)
-    }
+    const contactCreateRes = await ContactController.updateContact(userUUID, contactID, contact)
+    logger.info(`End contact PUT with response: ${JSON.stringify(contactCreateRes)}`)
+    return res.status(contactCreateRes.statusCode).json(contactCreateRes.responseBody)
 })
 
 router.delete('/:contactId', async(req, res) => {
