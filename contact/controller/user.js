@@ -75,6 +75,32 @@ const ContactController = {
         }
     },
 
+    async getContactsForUser(userUUID){
+        if(!userUUID){
+            return{
+                statusCode: 400,
+                responseBody:{
+                    errorFlag: 1, 
+                    message: "Invalid user authorization",
+                    contact: {},
+                }
+            }
+        }
+
+        let contacts = await Contact.fetchByUUID(userUUID)
+        contacts = contacts.map(c => c.toJSON())
+
+        return {
+            statusCode: 200,
+            responseBody:{
+                errorFlag: 0,
+                message: '',
+                contacts: contacts,
+            }
+        }
+
+    },
+
     async createNewContact(userUUID, contact){
         if(!userUUID){
             return{

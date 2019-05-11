@@ -3,6 +3,14 @@ const router = express.Router()
 const ContactController = require('../../../controller/user.js')
 const logger = require('../../../util/logger.js')
 
+router.get('/', async(req, res) => {
+    logger.info(`Start contacts GET with parameters: ${JSON.stringify(req.body)}`)
+    const userUUID = req.body.userUUID
+    const contactsGetRes = await ContactController.getContactsForUser(userUUID)
+    logger.info(`End contacts GET with parameters: ${JSON.stringify(req.body)}`)
+    return res.status(contactsGetRes.statusCode).json(contactsGetRes.responseBody)
+})
+
 router.get('/:contactID', async(req, res) => {
     logger.info(`Start contact GET with parameters: ${JSON.stringify(req.body)}`)
     const userUUID = req.body.userUUID

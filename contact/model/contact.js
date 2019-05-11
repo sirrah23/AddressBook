@@ -62,6 +62,21 @@ class Contact{
                         )
     }
 
+    static async fetchByUUID(uuid){
+        const user = await User.fetch(uuid)
+        const contacts = await dbConn('contact')
+                                .where({'userId': user.id})
+        return contacts.map(contact => new Contact(
+                                                contact.name, 
+                                                contact.address, 
+                                                contact.relationship, 
+                                                contact.phoneNumber, 
+                                                user, 
+                                                contact.id, 
+                                                contact.createdAt
+                                            ))
+    }
+
     toJSON(){
         return {
             name: this.name,

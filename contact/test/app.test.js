@@ -188,3 +188,57 @@ test('fail to retrieve a non-existent contact', async done => {
     expect(res.body.message).toBe(`Contact with id ${insertedContactRes.body.contact.id+1} was not found`)
     done()
 })
+
+test('successfully retrieve all contacts for a given user', async done => {
+    const userId = uuid()
+    const u1 = new User(userId)
+    await u1.save()
+    
+    const c1 = {name: 'John Smith', relationship: 'Father', address: 'Hogwarts'}
+    const c2 = {name: 'John Titor', relationship: 'Brother', address: '221B Baker St.' }
+    
+    await request(app)
+            .post('/api/v1/contact')
+            .set('Accept', 'application/json')
+            .send({userUUID: u1.uuid, contact: c1})
+    await request(app)
+            .post('/api/v1/contact')
+            .set('Accept', 'application/json')
+            .send({userUUID: u1.uuid, contact: c2})
+    const allInsertedContacts = await request(app)
+                                            .get('/api/v1/contact')
+                                            .set('Accept', 'application/json')
+                                            .send({userUUID: u1.uuid})
+    expect(allInsertedContacts.status).toBe(200)
+    expect(allInsertedContacts.body.errorFlag).toBe(0)
+    expect(allInsertedContacts.body.contacts.length).toBe(2)
+    
+    const firstContact = {}
+    firstContact.name = allInsertedContacts.body.contacts[0].name
+    firstContact.relationship = allInsertedContacts.body.contacts[0].relationship
+    firstContact.address = allInsertedContacts.body.contacts[0].address
+    
+    const secondContact = {}
+    secondContact.name = allInsertedContacts.body.contacts[1].name
+    secondContact.relationship = allInsertedContacts.body.contacts[1].relationship
+    secondContact.address = allInsertedContacts.body.contacts[1].address
+
+    expect([firstContact, secondContact]).toContainEqual(c1)
+    expect([firstContact, secondContact]).toContainEqual(c2)
+    done()
+})
+
+test('successfully retrieve no contacts for a given user', async done => {
+    const userId = uuid()
+    const u1 = new User(userId)
+    await u1.save()
+
+    const allInsertedContacts = await request(app)
+                                            .get('/api/v1/contact')
+                                            .set('Accept', 'application/json')
+                                            .send({userUUID: u1.uuid})
+    expect(allInsertedContacts.status).toBe(200)
+    expect(allInsertedContacts.body.errorFlag).toBe(0)
+    expect(allInsertedContacts.body.contacts.length).toBe(0)
+    done()
+})
