@@ -9,6 +9,7 @@ class User{
     }
 
     async save(){
+        //TODO: Add some kind error trapping here in case this fails
         const res = await dbConn('user')
                             .insert({
                                 'uuid': this.uuid
