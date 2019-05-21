@@ -9,8 +9,12 @@ function generateAuthTokenRequest(username){
 }
 
 function sendValidateRequest(token){
-    const payload = jwt.verify(token, secretKey)
-    return {error: 0, errorMsg: '', payload}
+    try {
+        const payload = jwt.verify(token, secretKey)
+        return {errorFlag: 0, errorMsg: '', payload}
+    } catch (err){
+        return {errorFlag: 1, errorMsg: 'Invalid token'}
+    }
 }
 
 module.exports = {

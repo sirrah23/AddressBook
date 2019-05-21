@@ -22,15 +22,15 @@ function authorizerFactory(env){
     }
 }
 
-function authorizationMiddleware(req, res, next){
+async function authorizationMiddleware(req, res, next){
     if(!req.headers.authorization)
         return res.status(403).json({errorFlag:1, errorMsg: 'Unauthorized request!'})
-    const tokenMatch = /bearer (\w)/.exec(req.headers.authorization)
+    const tokenMatch = /bearer (.+)/.exec(req.headers.authorization)
     if(!tokenMatch)
         return res.status(403).json({errorFlag:1, errorMsg: 'Unauthorized request!'})
     const token = tokenMatch[1]
     const authorizer = authorizerFactory(process.env.mode)
-    const authCheckResult = authorizer.authorizationCheck(token)
+    const authCheckResult = await authorizer.authorizationCheck(token)
     if(authCheckResult.errorFlag === 1)
         return res.status(403).json({errorFlag:1, errorMsg: 'Unauthorized request!'})
     req.authDataPayload = authCheckResult.payload
