@@ -29,6 +29,17 @@ services:
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
       - hot_standby=on
+  contact:
+    build: ./contact
+    ports: 
+      - "3000:3000"
+    volumes:
+      - ./contact:/contact
+    container_name: contact_node
+    environment:
+      - mode=prod
+    depends_on:
+      - "contact_db"
   contact_db:
     build: ./database/contact
     ports:

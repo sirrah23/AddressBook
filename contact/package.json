@@ -4,7 +4,8 @@
   "description": "A node that manages contact information through a REST API",
   "main": "index.js",
   "scripts": {
-    "test": "mode=test jest"
+    "test": "mode=test jest",
+    "start": "node server.js"
   },
   "author": "sirrah23",
   "license": "MIT",

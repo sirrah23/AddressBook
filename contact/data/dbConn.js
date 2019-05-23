@@ -22,5 +22,5 @@ logger.info(`Creating connection to database ${db}`)
 
 module.exports = require('knex')({
     client: 'pg',
-    connection: `postgresql://postgres:mysecretpassword@localhost:5432/${db}`
+    connection: `postgresql://postgres:mysecretpassword@contact_db:5432/${db}`
 })
