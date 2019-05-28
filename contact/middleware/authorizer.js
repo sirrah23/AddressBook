@@ -1,4 +1,5 @@
 const authServiceConnMock = require('../mock/authServiceConnMock.js')
+const authServiceConn = require('../connection/authServiceConn')
 
 //TODO: This class is kind of useless...and so is the factory
 //          ...should I get rid of it?
@@ -9,7 +10,7 @@ class Authorizer{
     }
 
     async authorizationCheck(token){
-        return this.authServiceConn.sendValidateRequest(token)
+        return await this.authServiceConn.sendValidateRequest(token)
     }
 }
 
@@ -18,7 +19,7 @@ function authorizerFactory(env){
         case 'test':
             return new Authorizer(authServiceConnMock)
         default:
-            throw new Error('In progress...')
+            return new Authorizer(authServiceConn)
     }
 }
 

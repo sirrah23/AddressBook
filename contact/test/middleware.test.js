@@ -15,7 +15,7 @@ afterAll(async done => {
 
 test('succesfully authorize a request with a valid token', async done => {
     const testUsername = 'user001'
-    const token = authServiceConnMock.generateAuthTokenRequest(testUsername)
+    const token = await authServiceConnMock.generateAuthTokenRequest(testUsername)
     const nextSpy = sinon.spy()
     const req = httpMocks.createRequest()
     const res = httpMocks.createResponse()
@@ -46,7 +46,7 @@ test('fail to validate an invalid token', async done => {
 
 test('succesfully add a user to the database via the contents of a successfully validated auth token payload', async done => {
     const testUsername = 'user001'
-    const token = authServiceConnMock.generateAuthTokenRequest(testUsername)
+    const token = await authServiceConnMock.generateAuthTokenRequest(testUsername)
     const nextSpyAuth = sinon.spy()
     const req = httpMocks.createRequest()
     const res = httpMocks.createResponse()
@@ -65,7 +65,7 @@ test('succesfully add a user to the database via the contents of a successfully 
 
 test('successfully move on if the user already exists in the database', async done => {
     const testUsername = 'user001'
-    const token = authServiceConnMock.generateAuthTokenRequest(testUsername)
+    const token = await authServiceConnMock.generateAuthTokenRequest(testUsername)
     const nextSpyAuth = sinon.spy()
     const req = httpMocks.createRequest()
     const res = httpMocks.createResponse()
