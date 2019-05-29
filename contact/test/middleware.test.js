@@ -39,7 +39,7 @@ test('fail to validate an invalid token', async done => {
     expect(!!req.authDataPayload).toBe(false)
     expect(res.statusCode).toBe(403)
     expect(jsonResponse.errorFlag).toBe(1)
-    expect(jsonResponse.errorMsg).toBe('Unauthorized request!')
+    expect(jsonResponse.message).toBe('Unauthorized request!')
     expect(nextSpy.calledOnce).toBe(false)
     done()
 })

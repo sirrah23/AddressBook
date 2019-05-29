@@ -2,6 +2,11 @@ const express = require('express')
 const router = express.Router()
 const ContactController = require('../../../controller/user.js')
 const logger = require('../../../util/logger.js')
+const authMiddleware = require('../../../middleware/authorizer.js')
+const userMiddleware = require('../../../middleware/user.js')
+
+router.use(authMiddleware)
+router.use(userMiddleware)
 
 router.get('/', async(req, res) => {
     logger.info(`Start contacts GET with parameters: ${JSON.stringify(req.body)}`)
