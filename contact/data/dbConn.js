@@ -1,29 +1,13 @@
+const config = require('../config/config.js')
 const logger = require("../util/logger.js")
-const mode = process.env.mode
 
-//TODO: Change this code once we have real configuration management
-let db
-let host = 'contact_db'
+logger.info(`Creating connection to database ${config.database.database}`)
 
-switch(mode){
-    case "prod":
-        db = "contact_prod"
-        break
-    case "test":
-        db = "contact_test"
-        host = 'localhost'
-        break
-    case "dev":
-        db = "contact_dev"
-        break
-    default:
-        db = "contact_dev"
-        break
+function buildDBConnectionString(dbConfig){ 
+    return `${dbConfig.type}://${dbConfig.username}:${dbConfig.password}@${dbConfig.host}:${dbConfig.port}/${dbConfig.database}`
 }
 
-logger.info(`Creating connection to database ${db}`)
-
 module.exports = require('knex')({
-    client: 'pg',
-    connection: `postgresql://postgres:mysecretpassword@${host}:5432/${db}`
+    client: config.database.client,
+    connection: buildDBConnectionString(config.database)
 })

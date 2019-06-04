@@ -1,0 +1,10 @@
+{
+    "database":{
+        "type": "postgres",
+        "client": "pg",
+        "username": "postgres",
+        "password": "mysecretpassword",
+        "host": "contact_db",
+        "port": 5432
+    }
+}
