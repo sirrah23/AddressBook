@@ -1,0 +1,7 @@
+{
+  "DB_TYPE" : "postgres",
+  "DB_USER" : "postgres",
+  "DB_PASS" : "mysecretpassword",
+  "DB_HOST" : "addb-user-db",
+  "DB_NAME" : ""
+}
