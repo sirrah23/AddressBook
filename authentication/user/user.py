@@ -52,7 +52,7 @@ class UserManager:
     a given set of user credentials
     """
 
-    def __init__(self, userNodeName=None, port=None):
+    def __init__(self, userNodeName, port):
         """Initialize a user manager
 
         Args:
