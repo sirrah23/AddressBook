@@ -9,9 +9,9 @@ class DBConfig:
     """Read a JSON configuration file containing database informationself.
     """
 
-    def __init__(self, fname):
+    def __init__(self, fname="./config.json"):
         keys = ["DB_TYPE", "DB_USER", "DB_PASS", "DB_HOST", "DB_NAME"]
-        p = Path(fname).expanduser()
+        p = Path(fname).absolute()
         with p.open() as f:
             self.config = json.load(f)
         for key in keys:
