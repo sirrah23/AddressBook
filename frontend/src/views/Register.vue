@@ -10,6 +10,9 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
+                <span v-if="errorMessage" class="red--text">{{
+                  errorMessage
+                }}</span>
                 <v-form>
                   <v-text-field
                     v-model="username"
@@ -46,11 +49,16 @@
 </template>
 
 <script>
+import RegistrationService from "../services/registration";
+
+const registrationService = new RegistrationService(null);
+
 export default {
   data: () => ({
     username: "",
     password: "",
-    passwordConfirm: ""
+    passwordConfirm: "",
+    errorMessage: ""
   }),
 
   props: {
@@ -59,7 +67,15 @@ export default {
 
   methods: {
     register: function() {
-      //TODO
+      const {
+        error,
+        message
+      } = registrationService.validateRegistrationCredentials(
+        this.username,
+        this.password,
+        this.passwordConfirm
+      );
+      if (error) this.errorMessage = message;
     }
   }
 };
