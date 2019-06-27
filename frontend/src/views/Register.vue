@@ -49,9 +49,12 @@
 </template>
 
 <script>
-import RegistrationService from "../services/registration";
+import {
+  RegistrationService,
+  UserNodeConnector
+} from "../services/registration";
 
-const registrationService = new RegistrationService(null);
+const registrationService = new RegistrationService(new UserNodeConnector());
 
 export default {
   data: () => ({
@@ -66,7 +69,7 @@ export default {
   },
 
   methods: {
-    register: function() {
+    register: async function() {
       const {
         error,
         message
@@ -75,7 +78,12 @@ export default {
         this.password,
         this.passwordConfirm
       );
-      if (error) this.errorMessage = message;
+      if (error) {
+        this.errorMessage = message;
+        return;
+      }
+
+      await registrationService.registerNewUser(this.username, this.password);
     }
   }
 };

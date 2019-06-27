@@ -1,5 +1,6 @@
 from sanic import Sanic
 from sanic.response import json
+from sanic_cors import CORS, cross_origin
 
 from user.user.schema import initializeDatabase
 from user.user.service_factory import RegistrationServiceFactory, ValidationServiceFactory
@@ -7,6 +8,7 @@ from user.user.service_factory import RegistrationServiceFactory, ValidationServ
 initializeDatabase()
 
 app = Sanic(__name__)
+CORS(app, automatic_options=True)
 registration_service = RegistrationServiceFactory.get_registration_service()
 validation_service = ValidationServiceFactory.get_validation_service()
 
