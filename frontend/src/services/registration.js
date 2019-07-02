@@ -1,3 +1,4 @@
+const { isValidEmail } = require("../utils/utils.js");
 const axios = require("axios");
 
 export class UserNodeConnector {
@@ -17,16 +18,20 @@ export class UserNodeConnector {
 
   async sendRegisterRequest(payload) {
     const url = this.generateEndpointURL("register");
-    const result = axios({
-      method: "post",
-      url,
-      data: payload,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
-      }
-    });
-    return result;
+    try {
+      const result = await axios({
+        method: "post",
+        url,
+        data: payload,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      });
+      return { error: false, message: "", result: result };
+    } catch (err) {
+      return { error: true, message: "Unable to register user", result: null };
+    }
   }
 }
 
@@ -35,8 +40,8 @@ export class RegistrationService {
     this.userNodeConnector = userNodeConnector;
   }
 
-  validateRegistrationCredentials(username, password, passwordConfirm) {
-    if (!username || !password || !passwordConfirm) {
+  validateRegistrationCredentials(username, email, password, passwordConfirm) {
+    if (!username || !email || !password || !passwordConfirm) {
       return { error: true, message: "Missing a required field" };
     }
 
@@ -44,14 +49,18 @@ export class RegistrationService {
       return { error: true, message: "Passwords do not match" };
     }
 
+    if (!isValidEmail(email)) {
+      return { error: true, message: "Email is invalid" };
+    }
+
     return { error: false, message: "" };
   }
 
-  async registerNewUser(username, password) {
+  async registerNewUser(username, email, password) {
     const result = this.userNodeConnector.sendRegisterRequest({
       username,
       password,
-      email: "todo@fixme.com"
+      email
     });
     return result;
   }

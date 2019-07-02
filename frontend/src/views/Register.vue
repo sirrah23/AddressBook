@@ -21,6 +21,12 @@
                     type="text"
                   ></v-text-field>
                   <v-text-field
+                    v-model="email"
+                    name="email"
+                    label="Email"
+                    type="text"
+                  ></v-text-field>
+                  <v-text-field
                     v-model="password"
                     id="password"
                     name="password"
@@ -59,6 +65,7 @@ const registrationService = new RegistrationService(new UserNodeConnector());
 export default {
   data: () => ({
     username: "",
+    email: "",
     password: "",
     passwordConfirm: "",
     errorMessage: ""
@@ -70,20 +77,28 @@ export default {
 
   methods: {
     register: async function() {
-      const {
-        error,
-        message
-      } = registrationService.validateRegistrationCredentials(
+      let error, message;
+
+      ({ error, message } = registrationService.validateRegistrationCredentials(
         this.username,
+        this.email,
         this.password,
         this.passwordConfirm
-      );
+      ));
       if (error) {
         this.errorMessage = message;
         return;
       }
 
-      await registrationService.registerNewUser(this.username, this.password);
+      ({ error, message } = await registrationService.registerNewUser(
+        this.username,
+        this.email,
+        this.password
+      ));
+      if (error) {
+        this.errorMessage = message;
+        return;
+      }
     }
   }
 };
