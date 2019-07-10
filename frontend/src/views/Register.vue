@@ -57,10 +57,11 @@
 <script>
 import {
   RegistrationService,
-  UserNodeConnector
+  UserNodeConnector,
+  AuthNodeConnector
 } from "../services/registration";
 
-const registrationService = new RegistrationService(new UserNodeConnector());
+const registrationService = new RegistrationService(new UserNodeConnector(), new AuthNodeConnector());
 
 export default {
   data: () => ({
@@ -77,7 +78,7 @@ export default {
 
   methods: {
     register: async function() {
-      let error, message;
+      let error, message, uuid, token;
 
       ({ error, message } = registrationService.validateRegistrationCredentials(
         this.username,
@@ -90,7 +91,7 @@ export default {
         return;
       }
 
-      ({ error, message } = await registrationService.registerNewUser(
+      ({ error, message, uuid, token } = await registrationService.registerNewUser(
         this.username,
         this.email,
         this.password

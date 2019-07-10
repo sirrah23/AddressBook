@@ -1,6 +1,8 @@
 const { isValidEmail } = require("../utils/utils.js");
 const axios = require("axios");
 
+//TODO: Move connectors into a separate file
+//TODO: Extract common connector code
 export class UserNodeConnector {
   constructor() {
     //TODO: Make this configurable
@@ -19,7 +21,7 @@ export class UserNodeConnector {
   async sendRegisterRequest(payload) {
     const url = this.generateEndpointURL("register");
     try {
-      const result = await axios({
+      const response = await axios({
         method: "post",
         url,
         data: payload,
@@ -28,16 +30,55 @@ export class UserNodeConnector {
           "Content-Type": "application/json"
         }
       });
-      return { error: false, message: "", result: result };
+      return { error: false, message: "", response: response };
     } catch (err) {
-      return { error: true, message: "Unable to register user", result: null };
+      return { error: true, message: "Unable to register user", response: null };
+    }
+  }
+}
+
+export class AuthNodeConnector {
+  constructor() {
+    //TODO: Make this configurable
+    this.hostname = `localhost`;
+    this.port = 8000;
+  }
+
+  generateBaseURL() {
+    return `http://${this.hostname}:${this.port}`;
+  }
+
+  generateEndpointURL(endpoint) {
+    return `${this.generateBaseURL()}/${endpoint}`;
+  }
+
+  async sendGenerateAuthTokenRequest(payload) {
+    const url = this.generateEndpointURL("generateAuthToken");
+    try {
+      const response = await axios({
+        method: "post",
+        url,
+        data: payload,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      });
+      return { error: false, message: "", response: response };
+    } catch (err) {
+      return {
+        error: true,
+        message: "Unable to fetch auth token for user",
+        response: null
+      };
     }
   }
 }
 
 export class RegistrationService {
-  constructor(userNodeConnector) {
+  constructor(userNodeConnector, authNodeConnector) {
     this.userNodeConnector = userNodeConnector;
+    this.authNodeConnector = authNodeConnector;
   }
 
   validateRegistrationCredentials(username, email, password, passwordConfirm) {
@@ -57,11 +98,38 @@ export class RegistrationService {
   }
 
   async registerNewUser(username, email, password) {
-    const result = this.userNodeConnector.sendRegisterRequest({
+    const registerResult = await this.userNodeConnector.sendRegisterRequest({
       username,
       password,
       email
     });
-    return result;
+    if (registerResult.error) {
+      return {
+        error: registerResult.error,
+        message: registerResult.message,
+        uuid: "",
+        token: ""
+      };
+    }
+    console.log(registerResult)
+
+    const authTokenResult = await this.authNodeConnector.sendGenerateAuthTokenRequest(
+      { username, password }
+    );
+    if (authTokenResult.error) {
+      return {
+        error: authTokenResult.error,
+        message: authTokenResult.message,
+        uuid: "",
+        token: ""
+      };
+    }
+
+    return {
+      error: 0,
+      message: "",
+      uuid: registerResult.response.data.user.uuid,
+      token: authTokenResult.response.data.token
+    };
   }
 }
