@@ -61,7 +61,10 @@ import {
   AuthNodeConnector
 } from "../services/registration";
 
-const registrationService = new RegistrationService(new UserNodeConnector(), new AuthNodeConnector());
+const registrationService = new RegistrationService(
+  new UserNodeConnector(),
+  new AuthNodeConnector()
+);
 
 export default {
   data: () => ({
@@ -91,7 +94,12 @@ export default {
         return;
       }
 
-      ({ error, message, uuid, token } = await registrationService.registerNewUser(
+      ({
+        error,
+        message,
+        uuid,
+        token
+      } = await registrationService.registerNewUser(
         this.username,
         this.email,
         this.password
@@ -100,6 +108,7 @@ export default {
         this.errorMessage = message;
         return;
       }
+      this.$store.commit("user/authenticate", { uuid, token });
     }
   }
 };

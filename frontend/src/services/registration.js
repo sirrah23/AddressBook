@@ -32,7 +32,11 @@ export class UserNodeConnector {
       });
       return { error: false, message: "", response: response };
     } catch (err) {
-      return { error: true, message: "Unable to register user", response: null };
+      return {
+        error: true,
+        message: "Unable to register user",
+        response: null
+      };
     }
   }
 }
@@ -111,7 +115,6 @@ export class RegistrationService {
         token: ""
       };
     }
-    console.log(registerResult)
 
     const authTokenResult = await this.authNodeConnector.sendGenerateAuthTokenRequest(
       { username, password }
