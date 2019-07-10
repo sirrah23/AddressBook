@@ -11,6 +11,7 @@ RUN apt-get update \
     python-dev \
     gcc \
     python-psycopg2 \
+    libpq-dev\
   && rm -rf /var/lib/apt/lists/*
 
 # Install pipenv so that we can use it to generate a requirements.txt file

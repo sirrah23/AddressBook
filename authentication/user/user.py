@@ -67,7 +67,7 @@ class UserManager:
         if userNodeName:
             self.userNodeName = userNodeName
         if port:
-            self.port = property
+            self.port = port
 
     def getIfValid(self, username, password):
         """Get the data for a user if the given (username, password) pair "is valid",

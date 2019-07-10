@@ -2,12 +2,14 @@ import os
 
 from sanic import Sanic
 from sanic.response import json
+from sanic_cors import CORS, cross_origin
 
 from authentication.jwt.jwtmanager import JWTManager
 from authentication.user.user import UserManager, FakeUserManager
 from authentication.config import config
 
 app = Sanic(__name__)
+CORS(app, automatic_options=True)
 
 if os.environ.get("mode", "test") == "test":
     jwtm = JWTManager(userManager=FakeUserManager())
