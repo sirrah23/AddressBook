@@ -109,6 +109,7 @@ export default {
         return;
       }
       this.$store.commit("user/authenticate", { uuid, token });
+      this.$router.replace({ path: "book" });
     }
   }
 };
