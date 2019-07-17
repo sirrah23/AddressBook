@@ -24,7 +24,8 @@ export default {
   components: {
     Contact
   },
-  mounted: async () => {
+  async mounted(){
+    this.validateUserIsAuthenticated();
     await this.initializeViewWithContactData();
   },
   data: () => ({
@@ -41,6 +42,11 @@ export default {
       const res = await this.contactService.getAllContacts();
       if (res.error) this.errorMessage = res.message;
       else this.contacts = res.response.data.contacts;
+    },
+    validateUserIsAuthenticated() {
+      const authToken = this.$store.getters["user/getToken"];
+      const userUUID = this.$store.getters["user/getUUID"];
+      if (!authToken || !userUUID) this.$router.replace({ path: "/" });
     }
   }
 };
