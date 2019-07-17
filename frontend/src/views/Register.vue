@@ -42,10 +42,22 @@
                   ></v-text-field>
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn @click="register" color="primary">Register</v-btn>
-              </v-card-actions>
+              <v-layout row wrap>
+                <v-flex>
+                  <v-card-actions>
+                    <v-flex>
+                      <v-flex offset-xs1>
+                        <router-link to="/login">
+                          Or log in to your account...
+                        </router-link>
+                      </v-flex>
+                    </v-flex>
+                    <v-flex offset-xs5>
+                      <v-btn @click="register" color="primary">Register</v-btn>
+                    </v-flex>
+                  </v-card-actions>
+                </v-flex>
+              </v-layout>
             </v-card>
           </v-flex>
         </v-layout>

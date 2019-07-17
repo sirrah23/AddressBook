@@ -24,7 +24,7 @@ export default {
   components: {
     Contact
   },
-  async mounted(){
+  async mounted() {
     this.validateUserIsAuthenticated();
     await this.initializeViewWithContactData();
   },
