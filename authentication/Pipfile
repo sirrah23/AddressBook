@@ -12,7 +12,6 @@ pylint = "*"
 aiohttp = "*"
 requests = "*"
 nose = "*"
-sanic-cors = "*"
 
 [requires]
 python_version = "3.6"
