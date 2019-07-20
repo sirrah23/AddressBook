@@ -12,7 +12,6 @@ sanic = "*"
 aiohttp = "*"
 psycopg2 = "*"
 nose = "*"
-sanic-cors = "*"
 
 [requires]
 python_version = "3.6"
