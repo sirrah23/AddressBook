@@ -52,6 +52,15 @@
 </template>
 
 <script>
+import { AuthNodeConnector } from "../connectors/auth.js";
+import { UserNodeConnector } from "../connectors/user.js";
+import { LoginService } from "../services/login.js";
+
+const loginService = new LoginService(
+  new UserNodeConnector(),
+  new AuthNodeConnector()
+);
+
 export default {
   data: () => ({
     username: "",
@@ -59,8 +68,28 @@ export default {
     errorMessage: ""
   }),
   methods: {
-    login() {
-      //TODO: Implement me
+    async login() {
+      let error, message, uuid, token;
+
+      ({ error, message } = loginService.validateLoginCredentials(
+        this.username,
+        this.password
+      ));
+      if (error) {
+        this.errorMessage = message;
+        return;
+      }
+
+      ({ error, message, uuid, token } = await loginService.loginUser(
+        this.username,
+        this.password
+      ));
+      if (error) {
+        this.errorMessage = message;
+        return;
+      }
+      this.$store.commit("user/authenticate", { uuid, token });
+      this.$router.replace({ path: "book" });
     }
   }
 };

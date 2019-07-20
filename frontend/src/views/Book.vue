@@ -18,7 +18,8 @@
 
 <script>
 import Contact from "../components/Contact";
-import { ContactService, ContactNodeConnector } from "../services/contact.js";
+import { ContactNodeConnector } from "../connectors/contact.js";
+import { ContactService } from "../services/contact.js";
 
 export default {
   components: {

@@ -65,11 +65,9 @@
 </template>
 
 <script>
-import {
-  RegistrationService,
-  UserNodeConnector,
-  AuthNodeConnector
-} from "../services/registration";
+import { AuthNodeConnector } from "../connectors/auth.js";
+import { UserNodeConnector } from "../connectors/user.js";
+import { RegistrationService } from "../services/registration.js";
 
 const registrationService = new RegistrationService(
   new UserNodeConnector(),
