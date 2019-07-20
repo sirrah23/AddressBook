@@ -7,19 +7,15 @@
     </v-toolbar>
 
     <v-content>
-      <Register />
+      <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Register from "./views/Register";
-
 export default {
   name: "App",
-  components: {
-    Register
-  },
+  components: {},
   data() {
     return {
       //
