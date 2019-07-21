@@ -11,8 +11,8 @@ import Login from "../components/Login";
 
 export default {
   data: () => ({
-    registerMode: true,
-    loginMode: false
+    loginMode: true,
+    registerMode: false
   }),
   components: {
     Register,

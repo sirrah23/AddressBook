@@ -1,55 +1,22 @@
 <template>
   <v-app>
     <v-content>
-      <v-container>
-        <v-layout row wrap>
-          <v-toolbar app>
-            <v-flex>
-              <v-toolbar-title class="headline text-uppercase">
-                <span>AddressBook</span>
-              </v-toolbar-title>
-            </v-flex>
-            <v-flex v-if="username" offset-md10>
-              <v-menu offset-y>
-                <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark v-on="on">
-                    {{ username }}
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-tile>
-                    <v-list-tile-title>
-                      <Logout />
-                    </v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-              </v-menu>
-            </v-flex>
-          </v-toolbar>
-        </v-layout>
-      </v-container>
-    </v-content>
-
-    <v-content>
+      <Toolbar />
       <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Logout from "./components/Logout.vue";
+import Toolbar from "./components/Toolbar.vue";
+
 export default {
   name: "App",
-  components: { Logout },
+  components: { Toolbar },
   data() {
     return {
       //
     };
-  },
-  computed: {
-    username() {
-      return this.$store.getters["user/getUsername"];
-    }
   }
 };
 </script>
