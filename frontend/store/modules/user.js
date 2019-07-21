@@ -21,6 +21,11 @@ const mutations = {
         state.uuid = uuid
         state.token = token
         state.username = username
+    },
+    logoff(state){
+        state.uuid = null
+        state.token = null
+        state.username = null
     }
 }
 

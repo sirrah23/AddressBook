@@ -18,7 +18,9 @@
                 </template>
                 <v-list>
                   <v-list-tile>
-                    <v-list-tile-title>Logout</v-list-tile-title>
+                    <v-list-tile-title @click="logout" style="cursor:pointer"
+                      >Logout</v-list-tile-title
+                    >
                   </v-list-tile>
                 </v-list>
               </v-menu>
@@ -42,6 +44,12 @@ export default {
     return {
       //
     };
+  },
+  methods: {
+    logout() {
+      this.$store.commit("user/logoff");
+      this.$router.replace({ path: "/" });
+    }
   },
   computed: {
     username() {
