@@ -88,7 +88,11 @@ export default {
         this.errorMessage = message;
         return;
       }
-      this.$store.commit("user/authenticate", { uuid, token });
+      this.$store.commit("user/authenticate", {
+        uuid,
+        token,
+        username: this.username
+      });
       this.$router.replace({ path: "book" });
     }
   }

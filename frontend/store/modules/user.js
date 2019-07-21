@@ -1,6 +1,7 @@
 const state = {
     uuid: null,
-    token: null
+    token: null,
+    username: null
 }
 
 const getters = {
@@ -9,13 +10,22 @@ const getters = {
     },
     getToken(state){
         return state.token
+    },
+    getUsername(state){
+        return state.username
     }
 }
 
 const mutations = {
-    authenticate(state, {uuid, token}){
+    authenticate(state, {uuid, token, username}){
         state.uuid = uuid
         state.token = token
+        state.username = username
+    },
+    logoff(state){
+        state.uuid = null
+        state.token = null
+        state.username = null
     }
 }
 

@@ -1,21 +1,18 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>AddressBook</span>
-      </v-toolbar-title>
-    </v-toolbar>
-
     <v-content>
+      <Toolbar />
       <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
+import Toolbar from "./components/Toolbar.vue";
+
 export default {
   name: "App",
-  components: {},
+  components: { Toolbar },
   data() {
     return {
       //
