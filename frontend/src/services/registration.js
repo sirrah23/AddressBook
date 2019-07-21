@@ -37,6 +37,15 @@ export class RegistrationService {
       };
     }
 
+    if (registerResult.response.data.error === 1) {
+      return {
+        error: true,
+        message: registerResult.response.data.errorMsg,
+        uuid: "",
+        token: ""
+      };
+    }
+
     const authTokenResult = await this.authNodeConnector.sendGenerateAuthTokenRequest(
       { username, password }
     );
@@ -44,6 +53,15 @@ export class RegistrationService {
       return {
         error: authTokenResult.error,
         message: authTokenResult.message,
+        uuid: "",
+        token: ""
+      };
+    }
+
+    if (authTokenResult.response.data.error === 1) {
+      return {
+        error: true,
+        message: "Something went wrong",
         uuid: "",
         token: ""
       };
